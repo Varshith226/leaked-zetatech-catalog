@@ -47,16 +47,19 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        sidebar: {
-          DEFAULT: "hsl(var(--sidebar-background))",
-          foreground: "hsl(var(--sidebar-foreground))",
-          primary: "hsl(var(--sidebar-primary))",
-          "primary-foreground": "hsl(var(--sidebar-primary-foreground))",
-          accent: "hsl(var(--sidebar-accent))",
-          "accent-foreground": "hsl(var(--sidebar-accent-foreground))",
-          border: "hsl(var(--sidebar-border))",
-          ring: "hsl(var(--sidebar-ring))",
+        terminal: {
+          green: "hsl(var(--terminal-green))",
         },
+        glitch: {
+          magenta: "hsl(var(--glitch-magenta))",
+        },
+        warning: {
+          red: "hsl(var(--warning-red))",
+        },
+      },
+      fontFamily: {
+        'terminal': ['Share Tech Mono', 'monospace'],
+        'cyber': ['Roboto Condensed', 'sans-serif'],
       },
       borderRadius: {
         lg: "var(--radius)",
