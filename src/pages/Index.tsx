@@ -2,6 +2,9 @@ import { useState } from "react";
 import Header from "@/components/Header";
 import ProductCard from "@/components/ProductCard";
 import ProductModal from "@/components/ProductModal";
+import BootSequence from "@/components/BootSequence";
+import Ticker from "@/components/Ticker";
+import CorruptedModal from "@/components/CorruptedModal";
 import { Product } from "@/types/product";
 
 import nightOwlImg from "@/assets/night-owl.jpg";
@@ -69,16 +72,31 @@ const products: Product[] = [
 ];
 
 const Index = () => {
+  const [bootComplete, setBootComplete] = useState(false);
   const [activeFilter, setActiveFilter] = useState("ALL");
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [showCorrupted, setShowCorrupted] = useState(false);
 
   const filteredProducts = products.filter((product) => {
     if (activeFilter === "ALL") return true;
     return product.category === activeFilter;
   });
 
+  const handleProductClick = (product: Product) => {
+    // Special case for Skill-Weaver - show corrupted modal
+    if (product.id === "3") {
+      setShowCorrupted(true);
+    } else {
+      setSelectedProduct(product);
+    }
+  };
+
+  if (!bootComplete) {
+    return <BootSequence onComplete={() => setBootComplete(true)} />;
+  }
+
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background pb-16">
       <Header onFilterChange={setActiveFilter} activeFilter={activeFilter} />
 
       {/* Main Content - Add top padding to account for fixed header */}
@@ -89,7 +107,7 @@ const Index = () => {
             <ProductCard
               key={product.id}
               product={product}
-              onClick={() => setSelectedProduct(product)}
+              onClick={() => handleProductClick(product)}
             />
           ))}
         </div>
@@ -109,6 +127,15 @@ const Index = () => {
         open={!!selectedProduct}
         onClose={() => setSelectedProduct(null)}
       />
+
+      {/* Corrupted Modal */}
+      <CorruptedModal
+        open={showCorrupted}
+        onClose={() => setShowCorrupted(false)}
+      />
+
+      {/* Live Feed Ticker */}
+      <Ticker />
     </div>
   );
 };
