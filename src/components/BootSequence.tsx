@@ -16,6 +16,10 @@ const BootSequence = ({ onComplete }: BootSequenceProps) => {
   const [line7, setLine7] = useState("");
   const [progress, setProgress] = useState(0);
   const [flashBreach, setFlashBreach] = useState(0);
+  const [showLogo, setShowLogo] = useState(false);
+  const [logoGlitch, setLogoGlitch] = useState(false);
+  const [logoFragment, setLogoFragment] = useState(false);
+  const [logoDissolve, setLogoDissolve] = useState(false);
   const [glitch, setGlitch] = useState(false);
   const [countdown, setCountdown] = useState(5);
   const [redFlash, setRedFlash] = useState(false);
@@ -85,38 +89,67 @@ const BootSequence = ({ onComplete }: BootSequenceProps) => {
     }, 3100);
     timeoutRefs.current.push(t2);
 
-    // Stage 3: Bypassing ICE & Warning (5.0s - 8.0s)
-    typeWriter("BYPASSING COUNTER-INTRUSION (ICE)...", setLine5, 5100);
-    typeWriter("...ICE BYPASSED.", setLine6, 6000);
+    // Stage 3: Corporate Logo Corruption (5.0s - 8.0s)
+    const tLogo1 = setTimeout(() => {
+      setStage(2);
+      setShowLogo(true);
+    }, 5000);
+    timeoutRefs.current.push(tLogo1);
+
+    const tLogo2 = setTimeout(() => {
+      setLogoGlitch(true);
+      setTimeout(() => setLogoGlitch(false), 100);
+    }, 5500);
+    timeoutRefs.current.push(tLogo2);
+
+    const tLogo3 = setTimeout(() => {
+      setLogoFragment(true);
+    }, 6000);
+    timeoutRefs.current.push(tLogo3);
+
+    const tLogo4 = setTimeout(() => {
+      setLogoDissolve(true);
+    }, 7000);
+    timeoutRefs.current.push(tLogo4);
+
+    const tLogo5 = setTimeout(() => {
+      setShowLogo(false);
+      setStage(3);
+    }, 7900);
+    timeoutRefs.current.push(tLogo5);
+
+    // Stage 4: Bypassing ICE & Warning (8.0s - 11.0s)
+    typeWriter("BYPASSING COUNTER-INTRUSION (ICE)...", setLine5, 8100);
+    typeWriter("...ICE BYPASSED.", setLine6, 9000);
     
     // Glitch effect
     const t3 = setTimeout(() => {
       setGlitch(true);
       setTimeout(() => setGlitch(false), 100);
-    }, 6500);
+    }, 9500);
     timeoutRefs.current.push(t3);
 
     // Warning message
     const t4 = setTimeout(() => {
-      setStage(2);
-    }, 6600);
+      setStage(4);
+    }, 9600);
     timeoutRefs.current.push(t4);
 
-    // Stage 4: The Final Countdown (8.0s - 13.0s)
-    typeWriter("ACCESSING ROOT DIRECTORY: /ASSET_CATALOG_7.3.4/", setLine7, 8000);
+    // Stage 5: The Final Countdown (11.0s - 15.0s)
+    typeWriter("ACCESSING ROOT DIRECTORY: /ASSET_CATALOG_7.3.4/", setLine7, 11000);
     
     const t5 = setTimeout(() => {
-      setStage(3);
-    }, 9000);
+      setStage(5);
+    }, 12000);
     timeoutRefs.current.push(t5);
 
     // Countdown
-    const t6 = setTimeout(() => { setStage(4); setCountdown(5); }, 10000);
-    const t7 = setTimeout(() => setCountdown(4), 11000);
-    const t8 = setTimeout(() => setCountdown(3), 12000);
+    const t6 = setTimeout(() => { setStage(6); setCountdown(5); }, 13000);
+    const t7 = setTimeout(() => setCountdown(4), 14000);
+    const t8 = setTimeout(() => setCountdown(3), 14500);
     timeoutRefs.current.push(t6, t7, t8);
 
-    // Stage 5: The Transition (13.0s onwards)
+    // Stage 5 Transition: The Transition (15.0s onwards)
     const t9 = setTimeout(() => {
       setRedFlash(true);
       setTimeout(() => {
@@ -128,7 +161,7 @@ const BootSequence = ({ onComplete }: BootSequenceProps) => {
           }, 1500);
         }, 500);
       }, 100);
-    }, 13000);
+    }, 15000);
     timeoutRefs.current.push(t9);
 
     return () => {
@@ -163,13 +196,44 @@ const BootSequence = ({ onComplete }: BootSequenceProps) => {
           crtOff ? 'boot-crt-off' : ''
         }`}
       >
-        <div 
-          className={`font-terminal text-primary text-sm md:text-base space-y-1 px-4 max-w-3xl ${
-            glitch ? 'boot-glitch' : ''
-          } ${redFlash ? 'text-destructive' : ''}`}
-        >
-          {/* Stage 1 */}
-          <div>{line1}{line1 && !line1.includes("COMPLETE") && cursor && "_"}</div>
+        {/* Logo Stage */}
+        {showLogo && (
+          <div className="flex items-center justify-center">
+            <svg 
+              width="200" 
+              height="200" 
+              viewBox="0 0 200 200"
+              className={`${logoGlitch ? 'boot-logo-glitch' : ''} ${logoFragment ? 'boot-logo-fragment' : ''} ${logoDissolve ? 'boot-logo-dissolve' : ''}`}
+            >
+              {/* Zetatech Z Logo */}
+              <path
+                d="M 40 40 L 160 40 L 40 160 L 160 160 M 100 100 L 140 60"
+                stroke="hsl(var(--primary))"
+                strokeWidth="8"
+                fill="none"
+                strokeLinecap="square"
+              />
+              <circle
+                cx="100"
+                cy="100"
+                r="70"
+                stroke="hsl(var(--primary))"
+                strokeWidth="3"
+                fill="none"
+              />
+            </svg>
+          </div>
+        )}
+
+        {/* Text Stages */}
+        {!showLogo && (
+          <div 
+            className={`font-terminal text-primary text-sm md:text-base space-y-1 px-4 max-w-3xl ${
+              glitch ? 'boot-glitch' : ''
+            } ${redFlash ? 'text-destructive' : ''}`}
+          >
+            {/* Stage 1 */}
+            <div>{line1}{line1 && !line1.includes("COMPLETE") && cursor && "_"}</div>
           
           {/* Stage 2 */}
           {line2 && <div>{line2}</div>}
@@ -181,24 +245,25 @@ const BootSequence = ({ onComplete }: BootSequenceProps) => {
             </div>
           )}
           
-          {/* Stage 3 */}
+          {/* Stage 4 */}
           {line5 && <div>{line5}</div>}
           {line6 && <div>{line6}</div>}
-          {stage >= 2 && (
+          {stage >= 4 && (
             <div className="text-accent boot-shake">
               !! WARNING: UNAUTHORIZED ACCESS DETECTED. TRACE INITIATED. !!
             </div>
           )}
           
-          {/* Stage 4 */}
+          {/* Stage 5 */}
           {line7 && <div>{line7}</div>}
-          {stage >= 3 && <div>LOADING CATALOG...</div>}
-          {stage >= 4 && (
+          {stage >= 5 && <div>LOADING CATALOG...</div>}
+          {stage >= 6 && (
             <div className="text-[#FF0000]">
               PURGE IN T-MINUS: {countdown}
             </div>
           )}
-        </div>
+          </div>
+        )}
       </div>
 
       <style>{`
@@ -286,6 +351,48 @@ const BootSequence = ({ onComplete }: BootSequenceProps) => {
 
         .animate-fade-out {
           animation: fade-out 1.5s forwards;
+        }
+
+        .boot-logo-glitch {
+          animation: logo-glitch 0.1s;
+          filter: brightness(3);
+        }
+
+        @keyframes logo-glitch {
+          0%, 100% { transform: translateX(0); }
+          50% { transform: translateX(10px); }
+        }
+
+        .boot-logo-fragment {
+          animation: logo-fragment 1s forwards;
+        }
+
+        @keyframes logo-fragment {
+          0% { clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); }
+          20% { clip-path: polygon(0 0, 100% 0, 100% 30%, 0 30%); }
+          40% { clip-path: polygon(0 40%, 100% 40%, 100% 70%, 0 70%); }
+          60% { clip-path: polygon(30% 0, 70% 0, 70% 100%, 30% 100%); }
+          80% { clip-path: polygon(0 60%, 100% 60%, 100% 100%, 0 100%); }
+          100% { clip-path: polygon(20% 20%, 80% 20%, 80% 80%, 20% 80%); }
+        }
+
+        .boot-logo-dissolve {
+          animation: logo-dissolve 0.9s infinite;
+        }
+
+        @keyframes logo-dissolve {
+          0%, 100% { 
+            stroke: hsl(var(--terminal-green));
+            opacity: 1;
+          }
+          33% { 
+            stroke: hsl(var(--glitch-magenta));
+            opacity: 0.7;
+          }
+          66% { 
+            stroke: hsl(var(--warning-red));
+            opacity: 0.3;
+          }
         }
       `}</style>
     </>

@@ -56,6 +56,27 @@ All colors MUST be HSL.
     @apply bg-background text-foreground;
     font-family: 'Roboto Condensed', sans-serif;
     overflow-x: hidden;
+    cursor: crosshair;
+  }
+
+  /* Power Flicker Animation */
+  body::after {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.1);
+    pointer-events: none;
+    z-index: 9998;
+    animation: powerFlicker 5s infinite;
+  }
+
+  @keyframes powerFlicker {
+    0%, 90%, 100% { opacity: 0; }
+    91%, 94%, 97% { opacity: 1; }
+    92%, 95%, 98% { opacity: 0; }
   }
 
   h1, h2, h3, h4, h5, h6 {

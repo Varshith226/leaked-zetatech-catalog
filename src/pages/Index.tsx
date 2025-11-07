@@ -5,6 +5,7 @@ import ProductModal from "@/components/ProductModal";
 import BootSequence from "@/components/BootSequence";
 import Ticker from "@/components/Ticker";
 import CorruptedModal from "@/components/CorruptedModal";
+import TraceWidget from "@/components/TraceWidget";
 import { Product } from "@/types/product";
 
 import nightOwlImg from "@/assets/night-owl.jpg";
@@ -76,11 +77,23 @@ const Index = () => {
   const [activeFilter, setActiveFilter] = useState("ALL");
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [showCorrupted, setShowCorrupted] = useState(false);
+  const [scrambling, setScrambling] = useState(false);
 
   const filteredProducts = products.filter((product) => {
     if (activeFilter === "ALL") return true;
     return product.category === activeFilter;
   });
+
+  const handleFilterChange = (filter: string) => {
+    if (filter === activeFilter) return;
+    
+    // Trigger scramble animation
+    setScrambling(true);
+    setTimeout(() => {
+      setActiveFilter(filter);
+      setScrambling(false);
+    }, 300);
+  };
 
   const handleProductClick = (product: Product) => {
     // Special case for Skill-Weaver - show corrupted modal
@@ -97,12 +110,13 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background pb-16">
-      <Header onFilterChange={setActiveFilter} activeFilter={activeFilter} />
+      <Header onFilterChange={handleFilterChange} activeFilter={activeFilter} />
+      <TraceWidget />
 
       {/* Main Content - Add top padding to account for fixed header */}
       <main className="container mx-auto px-4 pt-[200px] md:pt-[180px] pb-12">
         {/* Product Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <div className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 transition-all duration-300 ${scrambling ? 'scramble' : ''}`}>
           {filteredProducts.map((product) => (
             <ProductCard
               key={product.id}
@@ -136,6 +150,31 @@ const Index = () => {
 
       {/* Live Feed Ticker */}
       <Ticker />
+
+      <style>{`
+        .scramble {
+          opacity: 0.5;
+          position: relative;
+        }
+
+        .scramble::after {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><rect fill="%2339ff14" x="0" y="0" width="2" height="2"/><rect fill="%23ff00ff" x="50" y="50" width="2" height="2"/><rect fill="%23c0c0c0" x="100" y="100" width="2" height="2"/></svg>') repeat;
+          opacity: 0.3;
+          pointer-events: none;
+          animation: static-noise 0.3s infinite;
+        }
+
+        @keyframes static-noise {
+          0%, 100% { opacity: 0.3; }
+          50% { opacity: 0.6; }
+        }
+      `}</style>
     </div>
   );
 };

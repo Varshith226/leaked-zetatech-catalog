@@ -7,14 +7,26 @@ interface ProductCardProps {
 }
 
 const ProductCard = ({ product, onClick }: ProductCardProps) => {
+  const handleClick = () => {
+    // Flash effect on button
+    const button = document.activeElement;
+    if (button instanceof HTMLElement) {
+      button.style.filter = 'brightness(3)';
+      setTimeout(() => {
+        button.style.filter = '';
+      }, 100);
+    }
+    onClick();
+  };
+
   return (
-    <div className="bg-card border border-primary/30 overflow-hidden hover:border-primary transition-all glitch-hover">
+    <div className="bg-card border border-primary/30 overflow-hidden hover:border-primary transition-all glitch-hover product-card">
       {/* Product Image */}
       <div className="aspect-video w-full overflow-hidden bg-background">
         <img
           src={product.image}
           alt={product.title}
-          className="w-full h-full object-cover"
+          className="w-full h-full object-cover transition-all duration-200 hover:brightness-125 hover:scale-105"
         />
       </div>
 
@@ -30,9 +42,9 @@ const ProductCard = ({ product, onClick }: ProductCardProps) => {
           PRICE: Ç {product.price.toLocaleString()}
         </div>
         <Button
-          onClick={onClick}
+          onClick={handleClick}
           variant="cyber"
-          className="w-full"
+          className="w-full transition-all hover:brightness-110"
         >
           VIEW SPEC
         </Button>

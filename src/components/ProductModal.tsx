@@ -14,7 +14,7 @@ const ProductModal = ({ product, open, onClose }: ProductModalProps) => {
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="max-w-4xl bg-background border-2 border-primary/50 p-0 overflow-hidden max-h-[90vh] overflow-y-auto">
+      <DialogContent className="max-w-4xl bg-background border-2 border-primary/50 p-0 overflow-hidden max-h-[90vh] overflow-y-auto modal-scan-in">
         {/* Close Button */}
         <button
           onClick={onClose}
@@ -81,6 +81,25 @@ const ProductModal = ({ product, open, onClose }: ProductModalProps) => {
             <span className="ml-2 text-destructive">(LINK DEAD)</span>
           </Button>
         </div>
+
+        <style>{`
+          .modal-scan-in {
+            animation: modal-scan-in 0.3s ease-out;
+          }
+
+          @keyframes modal-scan-in {
+            0% {
+              transform: scaleY(0);
+              transform-origin: top;
+              opacity: 0;
+            }
+            100% {
+              transform: scaleY(1);
+              transform-origin: top;
+              opacity: 1;
+            }
+          }
+        `}</style>
       </DialogContent>
     </Dialog>
   );
